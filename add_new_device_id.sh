@@ -59,3 +59,25 @@ else
 fi
 
 echo "--- Patch check complete. ---"
+echo ""
+
+# --- DKMS Rebuild Logic ---
+echo "--- Performing a clean rebuild of DKMS module: ${DKMS_MODULE_STRING} ---"
+
+# Check if the dkms command is available
+if ! command -v sudo dkms &>/dev/null; then
+    echo "'dkms' command not found. Will install the DKMS package now." >&2
+    sudo apt install dkms
+fi
+
+echo "Step 1: Uninstalling any active module..."
+sudo dkms uninstall "$DKMS_MODULE_STRING" || true
+
+echo "Step 2: Removing the module from the DKMS tree..."
+sudo dkms remove "$DKMS_MODULE_STRING" --all || true
+
+echo "Step 3: Forcing installation of the new module..."
+# The '--force' flag is critical here to bypass the sanity check and overwrite the module.
+sudo dkms install --force "$DKMS_MODULE_STRING"
+
+echo "--- DKMS rebuild complete. ---"
