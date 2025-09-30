@@ -12,6 +12,9 @@ set -e
 
 # Use the first command-line argument as the device ID, or default to "1638".
 DEVICE_ID="${1:-1638}"
+MODULE_NAME="vendor-reset"
+MODULE_VERSION="0.1.1"
+DKMS_MODULE_STRING="${MODULE_NAME}/${MODULE_VERSION}"
 
 # The project root is the directory where this script is located.
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
